@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./js/FileSelector.js"></script>
+    <script src="./js/CharList.js"></script>
+    <script src="./js/ASCIIfy.js"></script>
+    <script src="./js/main.js"></script>
+    <style>
+      #canvas {
+        border: 1px solid #444;
+        max-width: 100%;
+      }
+
+      .container {
+        width: 500px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      textarea {
+        width: 100%;
+        line-height: 0.6;
+        text-align: center;
+        height: 700px;
+        white-space: pre;
+      }
+
+      #charlist div {
+        display: inline-block;
+        border: 1px solid #dedede;
+        border-radius: 10px;
+        padding: 5px;
+        margin: 5px;
+      }
+
+      #charlist label {
+        margin: 0 10px;
+      }
+
+      #charlist span {
+        font-size: 10px;
+        font-family: sans-serif;
+        color: #f00;
+        cursor: pointer;
+      }
+
+      #loader {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: fixed;
+        z-index: 10;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: none;
+        color: #fff;
+      }
+
+      #loader.open {
+        display: block;
+      }
+
+      #charlist #addCharForm {
+        display: block;
+        margin: 5px 0;
+        border: none;
+      }
+
+      .charTag {
+        cursor: grab;
+      }
+
+      .charTag:active {
+        cursor: grabbing;
+      }
+
+      .dragIndicator {
+        width: 2px;
+        background-color: #fff;
+        height: 10px;
+        border-radius: 0 !important;
+        padding: 0px !important;
+        border: none !important;
+        margin: 1px !important;
+      }
+
+      .dragIndicator.active {
+        background-color: #ff0;
+        padding: 5px !important;
+      }
+
+      .dragIndicator.active.over {
+        background-color: #f40;
+      }
+
+      .lds-grid {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(2);
+      }
+      .lds-grid div {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        animation: lds-grid 1.2s linear infinite;
+      }
+      .lds-grid div:nth-child(1) {
+        top: 8px;
+        left: 8px;
+        animation-delay: 0s;
+      }
+      .lds-grid div:nth-child(2) {
+        top: 8px;
+        left: 32px;
+        animation-delay: -0.4s;
+      }
+      .lds-grid div:nth-child(3) {
+        top: 8px;
+        left: 56px;
+        animation-delay: -0.8s;
+      }
+      .lds-grid div:nth-child(4) {
+        top: 32px;
+        left: 8px;
+        animation-delay: -0.4s;
+      }
+      .lds-grid div:nth-child(5) {
+        top: 32px;
+        left: 32px;
+        animation-delay: -0.8s;
+      }
+      .lds-grid div:nth-child(6) {
+        top: 32px;
+        left: 56px;
+        animation-delay: -1.2s;
+      }
+      .lds-grid div:nth-child(7) {
+        top: 56px;
+        left: 8px;
+        animation-delay: -0.8s;
+      }
+      .lds-grid div:nth-child(8) {
+        top: 56px;
+        left: 32px;
+        animation-delay: -1.2s;
+      }
+      .lds-grid div:nth-child(9) {
+        top: 56px;
+        left: 56px;
+        animation-delay: -1.6s;
+      }
+      @keyframes lds-grid {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader">
+      <div class="lds-grid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div class="container">
+      <input type="file" id="file" />
+      <div id="charlist"></div>
+      <button id="render">Render</button><br />
+      <canvas width="500" height="500" id="canvas"></canvas>
+    </div>
+    <textarea id="asciiOutput"></textarea>
+  </body>
+</html>

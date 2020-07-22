@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./js",
+    "rootDir": "./ts",
+    "lib": ["dom", "ES2017"],
+    "target": "ES3",
+    "watch": true
+  }
+}
