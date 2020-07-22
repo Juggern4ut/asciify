@@ -10,6 +10,9 @@ class Asciify {
   asciiOutput: HTMLTextAreaElement;
   fileSelect: FileSelector;
 
+  /**
+   * Will setup all the needed elements and variabled
+   */
   constructor() {
     this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
     this.ctx = this.canvas.getContext("2d");
@@ -26,17 +29,15 @@ class Asciify {
       this.render(this.fileSelect.image);
     };
 
-    this.setupFileSelect();
-  }
-
-  setupFileSelect = () => {
     let file = document.getElementById("file") as HTMLInputElement;
     this.fileSelect = new FileSelector(file);
-    /*this.fileSelect.change((res) => {
-      this.render(res);
-    });*/
-  };
+  }
 
+  /**
+   * Will render a given image to the canvas and convert
+   * it to ascii art which will be put into the textarea
+   * @param res The image to asciify
+   */
   render(res) {
     this.loader(true);
     this.preloadImage(() => {
@@ -46,6 +47,10 @@ class Asciify {
     }, res);
   }
 
+  /**
+   * Will show or hide the loader based on the given parameter
+   * @param show Defines if the loader should be enabled or disabled
+   */
   loader = (show: boolean) => {
     const loader = document.getElementById("loader");
     if (show) {
@@ -55,6 +60,12 @@ class Asciify {
     }
   };
 
+  /**
+   * Will load a given image and draw it onto the canvas
+   * If no image is provided, the default image will be used
+   * @param cb The callback executed when the image is loaded
+   * @param imageSrc The source of the image to load
+   */
   preloadImage(cb: Function, imageSrc?: string) {
     const image = new Image();
     if (imageSrc) {
@@ -63,24 +74,36 @@ class Asciify {
       image.src = "/res/img.png";
     }
     image.onload = () => {
-      this.calculateDimensions(image);
+      this.updateDimensions(image);
       this.ctx.drawImage(image, 0, 0);
       cb();
     };
   }
 
-  calculateDimensions = (image) => {
+  /**
+   * Will update the width and height of the given
+   * image and set the size of the canvas accordingly
+   * @param image The image of which the dimensions should be calculated
+   */
+  updateDimensions = (image) => {
     this.width = image.width;
     this.height = image.height;
     this.canvas.setAttribute("width", "" + this.width);
     this.canvas.setAttribute("height", "" + this.height);
   };
 
+  /**
+   * Update the height of the textarea based on it's content
+   */
   setTextareaHeight = () => {
     this.asciiOutput.style.height = "5px";
     this.asciiOutput.style.height = 14 + this.asciiOutput.scrollHeight + "px";
   };
 
+  /**
+   * Loop through chunks of the image, calculate the lightness
+   * and put it into the lightnessArray
+   */
   fillLightnessArray() {
     this.lightnessArray = [];
     const rows = Math.ceil(this.width / this.cellSize);
@@ -117,6 +140,10 @@ class Asciify {
     }
   }
 
+  /**
+   * Will generate the ASCII-art based on the values
+   * from the lightnessArray
+   */
   generateAsciiText() {
     this.asciiText = "";
     this.lightnessArray.forEach((lightness, index) => {

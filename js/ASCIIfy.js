@@ -4,13 +4,10 @@ var Asciify = /** @class */ (function () {
         this.cellSize = 5;
         this.lightnessArray = [];
         this.asciiText = "";
-        this.setupFileSelect = function () {
-            var file = document.getElementById("file");
-            _this.fileSelect = new FileSelector(file);
-            /*this.fileSelect.change((res) => {
-              this.render(res);
-            });*/
-        };
+        /**
+         * Will show or hide the loader based on the given parameter
+         * @param show Defines if the loader should be enabled or disabled
+         */
         this.loader = function (show) {
             var loader = document.getElementById("loader");
             if (show) {
@@ -20,12 +17,20 @@ var Asciify = /** @class */ (function () {
                 loader.classList.remove("open");
             }
         };
-        this.calculateDimensions = function (image) {
+        /**
+         * Will update the width and height of the given
+         * image and set the size of the canvas accordingly
+         * @param image The image of which the dimensions should be calculated
+         */
+        this.updateDimensions = function (image) {
             _this.width = image.width;
             _this.height = image.height;
             _this.canvas.setAttribute("width", "" + _this.width);
             _this.canvas.setAttribute("height", "" + _this.height);
         };
+        /**
+         * Update the height of the textarea based on it's content
+         */
         this.setTextareaHeight = function () {
             _this.asciiOutput.style.height = "5px";
             _this.asciiOutput.style.height = 14 + _this.asciiOutput.scrollHeight + "px";
@@ -38,8 +43,14 @@ var Asciify = /** @class */ (function () {
         document.getElementById("render").onclick = function () {
             _this.render(_this.fileSelect.image);
         };
-        this.setupFileSelect();
+        var file = document.getElementById("file");
+        this.fileSelect = new FileSelector(file);
     }
+    /**
+     * Will render a given image to the canvas and convert
+     * it to ascii art which will be put into the textarea
+     * @param res The image to asciify
+     */
     Asciify.prototype.render = function (res) {
         var _this = this;
         this.loader(true);
@@ -49,6 +60,12 @@ var Asciify = /** @class */ (function () {
             _this.loader(false);
         }, res);
     };
+    /**
+     * Will load a given image and draw it onto the canvas
+     * If no image is provided, the default image will be used
+     * @param cb The callback executed when the image is loaded
+     * @param imageSrc The source of the image to load
+     */
     Asciify.prototype.preloadImage = function (cb, imageSrc) {
         var _this = this;
         var image = new Image();
@@ -59,7 +76,7 @@ var Asciify = /** @class */ (function () {
             image.src = "/res/img.png";
         }
         image.onload = function () {
-            _this.calculateDimensions(image);
+            _this.updateDimensions(image);
             _this.ctx.drawImage(image, 0, 0);
             cb();
         };
